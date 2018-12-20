@@ -1,20 +1,23 @@
 # ui.R
 
 library(shiny)
+source('dat.R')
 
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel(""),
+  titlePanel("IGR Analysis"),
   
   sidebarLayout(
     sidebarPanel(
       selectInput(
-        'id1',
+        'var',
         label = 'Label1',
         choices = c('Revenue Category' = 'revenue.source',
                     'Office' = 'office')
       ),
+      
+      br(),
       
       radioButtons(
         'filter',
@@ -25,13 +28,23 @@ shinyUI(fluidPage(
           'State Field Offices',
           'Other (Specify)'
         ),
-        choiceValues = list('All', 'zonalOffices', 'stateOffices', 'Other')
-      )
+        choiceValues = list('all', 'zonalOffices', 'stateOffices', 'other')
+      ),
+      
+      conditionalPanel(
+        "input.filter  == 'other'",
+        selectInput('singleOffice', label = '', choices = sort(unique(dat$office)))
+      ),
+      
+      br(), br(),
+      
+      checkboxInput('showTable', 'Display stats')
     ),
     
     mainPanel(
-      plotOutput("mainChart")
-      # textOutput("mainText")
+      plotOutput("mainChart"),
+      conditionalPanel("input.showTable", tableOutput('mainTable'))
+      
     )
   )
 ))
