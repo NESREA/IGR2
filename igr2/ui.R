@@ -43,7 +43,7 @@ shinyUI(fluidPage(
     
     mainPanel(
       plotOutput("mainChart"),
-      conditionalPanel("input.showTable", tableOutput('mainTable'))
+      conditionalPanel("input.showTable", dataTableOutput('mainTable'))
       
     )
   )

@@ -64,15 +64,17 @@ shinyServer(function(input, output) {
     
   })
   
-  output$mainTable <- renderTable({
+  output$mainTable <- renderDataTable({
+    
     d <- dataInput()
-    structure (
-      d %>%
-        select(office:amount) %>%
-        group_by(!!input$var) %>%
-        summarise(Total = sum(amount)) %>% 
-        as.data.frame()
-    )
+    var <- as.symbol(input$var)
+    d %<>%
+      select(office:amount) %>% 
+      group_by(!!var) %>%
+      summarise(Total = sum(amount)) %>%
+      as.data.frame()
+    
+    # mtcars %>% group_by(cyl) %>% summarise(avg.mpg = mean(mpg))
   })
   
 })
