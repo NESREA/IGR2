@@ -1,7 +1,7 @@
 # IGR2: Interactive exploratory analyses
 
 ## Installation
-Download to disk and extract ZIP archive.
+Download to disk and extract ZIP archive. This can be done interactively via a web browser or by running the script(s) available at <https://raw.githubusercontent.com/NESREA/install-igr2/master/install-igr2.ps1>.
 
 ## Usage
 For ease, use `run.bat` to start the application - on the command line or simply by clicking. 
