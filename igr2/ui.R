@@ -38,7 +38,9 @@ shinyUI(fluidPage(
       
       br(), br(),
       
-      checkboxInput('showTable', 'Display stats')
+      checkboxInput('showTable', 'Display stats'),
+      
+      width = 3
     ),
     
     mainPanel(
