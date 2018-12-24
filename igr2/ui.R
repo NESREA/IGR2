@@ -1,6 +1,7 @@
 # ui.R
 
 library(shiny)
+
 source('dat.R')
 
 shinyUI(fluidPage(
@@ -33,19 +34,28 @@ shinyUI(fluidPage(
       
       conditionalPanel(
         "input.filter  == 'other'",
-        selectInput('singleOffice', label = '', choices = sort(unique(dat$office)))
+        selectInput(
+          'singleOffice',
+          label = '',
+          choices = sort(unique(dat$office)),
+          selected = NULL)
       ),
       
       br(), br(),
       
-      checkboxInput('showTable', 'Display stats'),
+      checkboxInput('showTable', 'Show summary'),
+      
+      conditionalPanel(
+        "input.showTable === true",
+        checkboxInput('showStats', 'Show stats')
+        ),
       
       width = 3
     ),
     
     mainPanel(
       plotOutput("mainChart"),
-      conditionalPanel("input.showTable", dataTableOutput('mainTable'))
+      conditionalPanel("input.showTable", tableOutput('mainTable'))
       
     )
   )

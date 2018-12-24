@@ -1,8 +1,13 @@
 # chart.R
 
-library(tidyverse)
+library(dplyr)
+library(rlang)
+library(stringr)
+library(ggplot2)
 
 draw_bar_chart <- function(data, para) {
+  options(scipen = 999)
+  
   if (!is.symbol(para))
     para <- as.symbol(para)
   para <- enexpr(para)
@@ -16,7 +21,7 @@ draw_bar_chart <- function(data, para) {
     ggplot(aes(reorder(!!para, amt_m), y = amt_m, fill = !!para)) +
     geom_col() +
     coord_flip() +
-    ggtitle(paste(stub, xlabel)) +
+    ggtitle(paste(stub, sQuote(xlabel))) +
     ylab('Amount (N million)') +
     xlab(xlabel) +
     theme(legend.position = 'none',
