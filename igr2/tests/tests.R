@@ -17,3 +17,12 @@ test_that('Summary table is properly created', {
   expect_false(inherits(t.o, 'tbl'))
 })
 
+context('Polymorphism for data frame filter')
+test_that('Input validation is robust', {
+  expect_type(.validateInput(data.frame()), 'list')
+  expect_type(.validateInput(data.frame(), arg2 = character()), 'list')
+  expect_is(.validateInput(data.frame()), 'data.frame')
+  expect_is(.validateInput(data.frame(), arg2 = character()), 'data.frame')
+  expect_error(.validateInput())
+  
+})
