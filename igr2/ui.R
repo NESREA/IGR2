@@ -1,7 +1,6 @@
 # ui.R
 
 library(shiny)
-
 source('dat.R')
 
 shinyUI(fluidPage(
@@ -12,7 +11,7 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       selectInput(
-        'var',
+        'perspective',
         label = 'Label1',
         choices = c('Revenue Category' = 'revenue.source',
                     'Office' = 'office')
@@ -27,13 +26,19 @@ shinyUI(fluidPage(
           'All offices',
           'Zonal Offices',
           'State Field Offices',
-          'Other (Specify)'
+          'Individual Office'
         ),
-        choiceValues = list('all', 'zonalOffices', 'stateOffices', 'other')
+        choiceValues = list(
+          'allOffices',
+          'zonalOffices',
+          'stateOffices',
+          'individualOffice'
+        )
       ),
       
       conditionalPanel(
-        "input.filter  == 'other'",
+        "input.filter  == 'individualOffice' && 
+         input.perspective != 'office'",
         selectInput(
           'singleOffice',
           label = '',
@@ -55,8 +60,10 @@ shinyUI(fluidPage(
     
     mainPanel(
       plotOutput("mainChart"),
-      conditionalPanel("input.showTable", tableOutput('mainTable'))
-      
-    )
+      conditionalPanel("input.showTable", dataTableOutput('mainTable')),
+      conditionalPanel("input.showStats", tableOutput('statsTable'))
+    ),
+    
+    position = 'right'
   )
 ))
