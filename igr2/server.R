@@ -1,40 +1,31 @@
 # server.R
 
 library(shiny)
-library(dplyr)
-
-# Scripts to that app-specific objects (including data)
-# are loaded into the global environment
-source('chart.R')
-source('table.R')
-source('dat.R')
+library(magrittr)
+lapply(c('chart.R', 'dat.R', 'filter-out.R', 'table.R'), source)
 
 shinyServer(function(input, output) {
-  
+  ## Set S3 class and then call the right method 
+  ## of 'filter_out()' for data manipulation
   dataInput <- reactive({
-    dat %>%
-    {
-      if (!is.null(input$singleOffice))
-        filter(., office == input$singleOffice)
-      else
-        filter_data(., input$filter)
+    if (!inherits(dat, input$filter)) {
+      class(dat) %<>%
+        append(input$filter, 0)
     }
+    dat %>% 
+      filter_out(input$singleOffice)
   })
   
-  output$mainChart <- renderPlot({
-    draw_bar_chart(dataInput(), input$var) %>% 
-      print()
-  })
+  output$mainChart <- renderPlot(
+    draw_bar_chart(dataInput(), input$perspective)
+  )
   
-  output$mainTable <- renderTable({
-    var <- as.symbol(input$var)
-    make_summ_table(dataInput(), var)
-  },
-  striped = TRUE,
-  spacing = 'xs',
-  hover = TRUE,
-  bordered = TRUE,
-  align = 'l')
+  output$mainTable <- renderDataTable(
+    make_summ_table(dataInput(), input$perspective)
+  )
   
+  output$statsTable <- renderTable(
+    make_stat_table(dataInput(), input$perspective)
+  )
 })
  
