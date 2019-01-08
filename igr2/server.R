@@ -4,6 +4,8 @@ library(shiny)
 library(magrittr)
 lapply(c('chart.R', 'dat.R', 'filter-out.R', 'table.R'), source)
 
+## Note: The data are made available via dat.R
+
 shinyServer(function(input, output) {
   ## Set S3 class and then call the right method 
   ## of 'filter_out()' for data manipulation
