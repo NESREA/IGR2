@@ -2,6 +2,8 @@
 
 library(shiny)
 library(magrittr)
+library(here)
+
 lapply(c('chart.R', 'dat.R', 'filter-out.R', 'table.R'), source)
 
 ## Note: The data are made available via dat.R
@@ -18,16 +20,24 @@ shinyServer(function(input, output) {
       filter_out(input$singleOffice)
   })
   
-  output$mainChart <- renderPlot(
+  output$mainChart <- renderPlot({
     draw_bar_chart(dataInput(), input$perspective)
-  )
+  })
   
-  output$mainTable <- renderDataTable(
+  output$summaryTable <- renderTable({
     make_summ_table(dataInput(), input$perspective)
-  )
+  },
+  striped = TRUE,
+  bordered = TRUE,
+  spacing = 'xs',
+  width = "70")
   
-  output$statsTable <- renderTable(
+  output$statsTable <- renderTable({
     make_stat_table(dataInput(), input$perspective)
-  )
+  },
+  striped = TRUE,
+  bordered = TRUE,
+  spacing = 'xs',
+  width = "70")
 })
  

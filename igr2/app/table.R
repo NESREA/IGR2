@@ -14,13 +14,17 @@ make_summ_table <- function(data, param) {
 }
 
 
-
 make_stat_table <- function(data, param) {
   .validateTabulationInputs(data, param)
   .sumUpTheData(data, param) %$%   # magrittr exposition operator
   {
-    fivenum(Total)
-  }
+    fivenum(Total) %>% 
+      append(mean(Total, na.rm = TRUE), after = 2) %>% 
+      { format(round(.), big.mark = ',') }
+  } %>% 
+    matrix(ncol = length(.)) %>% 
+    as.data.frame() %>% 
+    setNames(c('Min.', 'L.H.', 'Mean', 'Median', 'U.H.', 'Max.'))
 }
 
 
@@ -28,7 +32,7 @@ make_stat_table <- function(data, param) {
 ## and returns the new data frame
 .sumUpTheData <- function(df = data.frame(), input = character())
 {
-  input <- if(!is.symbol(input))
+  input <- if (!is.symbol(input))
     as.symbol(input)
   df %>%
     group_by(!!input) %>%
@@ -37,8 +41,8 @@ make_stat_table <- function(data, param) {
 
 
 
-.validateTabulationInputs <- function(dt, i)
+.validateTabulationInputs <- function(data, input)
 {
-  stopifnot(is.data.frame(dt))
-  stopifnot(is.character(i))
+  stopifnot(is.data.frame(data))
+  stopifnot(is.character(input))
 }

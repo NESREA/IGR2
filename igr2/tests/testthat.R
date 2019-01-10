@@ -7,8 +7,8 @@ lapply(pkgs, function(pkg) {
   library(as.character(pkg), character.only = TRUE)
 })
 
-# Data source
-source(file.path(here(), 'dat.R'))
+# Find source files
+paths <- 
+  list.files(path = here(), pattern = '^(dat|table|chart)', recursive = TRUE)
 
-# Function source
-source(file.path(here(), 'table.R'))
+lapply(paths, source)

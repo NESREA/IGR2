@@ -81,7 +81,7 @@ filter_out.individualOffice <- function(x, selection = character())
 
 
 
-.validateInput <- function(arg1, arg2 = NULL)
+validateInput <- function(arg1, arg2 = NULL)
 {
   if (!is.data.frame(arg1))
     stop(sQuote(arg), 'is not a data frame')
