@@ -18,6 +18,9 @@ test_that('Summary table is properly created', {
 })
 
 
+context("Rendering of plot")
+
+
 context('Polymorphism for data frame filter')
 
 testStr <- 'input validation is robust'
@@ -39,4 +42,14 @@ test_that(paste("Table", testStr), {
   expect_error(.validateTabulationInputs(data.frame(), numeric()))
   expect_error(.validateTabulationInputs(data.frame(), logical()))
   expect_silent(.validateTabulationInputs(data.frame(), character()))
+})
+
+
+test_that(paste('Class extension', testStr), {
+  x <- NULL
+  expect_error(object = .extendClass(data.frame(), x), 
+               regexp = "Unexpected type for x - 'NULL'")
+  invisible(lapply(list(3, FALSE, pi, matrix(1), raw(42)), function(x) {
+    expect_error(.extendClass(data.frame(), x))
+  }))
 })
