@@ -70,7 +70,7 @@ filter_out.stateOffices <- function(x, selection = NULL)
 
 
 
-filter_out.individualOffice <- function(x, selection = character())
+filter_out.individualOffices <- function(x, selection = character())
 {
   .validateInput(x, selection)
   x %>% 
@@ -81,16 +81,19 @@ filter_out.individualOffice <- function(x, selection = character())
 
 
 
-validateInput <- function(arg1, arg2 = NULL)
+.validateInput <- function(df, input = NULL)
 {
-  if (!is.data.frame(arg1))
-    stop(sQuote(arg), 'is not a data frame')
-  if (!is.null(arg2) & !is.character(arg2))
-    stop(arg2, 'is not a character vector')
-  if (length(arg2 > 1)) {
-    arg2 <- arg2[1]
+  if (!is.data.frame(df))
+    stop(sQuote(arg), ' is not a data frame')
+  if (!is.null(input) & !is.character(input))
+    stop(input, ' is not a character vector')
+  if ((!inherits(df, 'individualOffices')) & !is.null(input))
+    stop('Offices cannot be selected for objects of class ',
+         class(df)[1])
+  if (length(input > 1)) {
+    input <- input[1]
     warning(
-      sprintf('Length of \'%s\' > 1 and only first element was used', arg2)
+      sprintf('Length of \'%s\' > 1 and only first element was used', input)
       )
   }
 }

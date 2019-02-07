@@ -1,13 +1,14 @@
 # wrangle.R: Fetch the data and make it look the way I want
 
-library(tidyverse)
+library(dplyr)
 library(magrittr)
 library(readxl)
+library(here)
 
-source('helpers.R')
+source(file.path(here(), 'app', 'helpers.R'))
 
 wk.book <-
-  file.path(here::here(),
+  file.path(here(),
             'data',
             '2018 IGR budget performance report FOR SA.xls')
 dt <- read_xls(
@@ -33,7 +34,7 @@ dt %<>%
     levels = revenueCategory,
     labels = names(revenueCategory)
   )) %>%
-  mutate(amt_k = (amount / 1e3)) %>%
-  mutate(amt_m = amount / 1e6)
+  mutate(amount_k = (amount / 1e3)) %>%
+  mutate(amount_m = amount / 1e6)
 
-saveRDS(dt, file = 'data/igr-data.rds')
+saveRDS(dt, file = file.path(here(), 'data', 'igr-data.rds'))

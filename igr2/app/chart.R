@@ -1,12 +1,15 @@
 # chart.R
-
 library(tidyverse)
 
 draw_bar_chart <- function(data, para) {
-  if (!is.symbol(para))
-    para <- as.symbol(para)
-  
-  para <- enexpr(para)
+  stopifnot(isFALSE(is.null(para)))
+  stopifnot(is.data.frame(data))
+
+  para <-
+    if (is.character(para))
+      as.symbol(para)
+  else
+    enexpr(para)
   
   xlabel <- para %>%
     deparse %>%
@@ -14,13 +17,11 @@ draw_bar_chart <- function(data, para) {
     unlist %>%
     str_c(collapse = ' ')
   
-  stub <- 'IGR disaggregated by'
-  
   gg <-
-    ggplot(data, aes(reorder(!!para, amt_m), y = amt_m, fill = !!para)) +
+    ggplot(data, aes(reorder(!!para, amount), y = amount, fill = !!para)) +
     geom_col() +
-    ggtitle(paste(stub, sQuote(xlabel))) +
-    ylab('Amount (N million)') +
+    ggtitle(paste('IGR disaggregated by', sQuote(xlabel))) +
+    ylab('Amount (NGN)') +
     xlab(xlabel) +
     theme(title = element_text(face = 'bold', size = rel(1.5)),
           legend.position = 'none',
